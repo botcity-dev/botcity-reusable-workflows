@@ -7,6 +7,10 @@ on:
         required: false
         default: true
         type: boolean
+      folder:
+        required: false
+        default: "botcity"
+        type: string
       mypy:
         required: false
         default: false
@@ -49,9 +53,9 @@ jobs:
       - name: Run Flake8 Linter
         if: ${{ inputs.flake8 }}
         run: |
-          flake8 botcity
+          flake8 ${{ inputs.folder }}
 
       - name: Run mypy Linter
         if: ${{ inputs.mypy }}
         run: |
-          mypy --namespace-packages -p "botcity"
+          mypy --namespace-packages -p ${{ inputs.folder }}
