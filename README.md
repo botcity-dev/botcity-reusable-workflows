@@ -5,11 +5,11 @@
 To facilitate the implementation of workflows shared by all botcity projects, it is necessary to include it in this project, for example the ci, linter and publish in pypi workflows.
 ## Available workflows
 
-| Name              | Language  | Arguments | Description|
-| ----------------- |-----------|-----------|------------|
-| ci | python | list_os, list_version | Run tests in pytest |
-| linter | python | flake8, mypy, list_os, list_version | Run flake8 and mypy.|
-| pypi_upload | python | version_python | Build package and publish in pypi |
+| Name            | Language | Arguments                                       | Secrets          | Description                         |
+|-----------------|----------|-------------------------------------------------|------------------|-------------------------------------|
+| **ci**          | python   | list_os_name, list_python_version               |                  | Run tests in pytest                 |
+| **linter**      | python   | flake8, mypy, list_os_name, list_python_version |                  | Run flake8 and mypy.                |
+| **pypi_upload** | python   |                                                 | PYPI_API_TOKEN   | Build package and publish in pypi   |
 
 
 
@@ -18,7 +18,8 @@ To facilitate the implementation of workflows shared by all botcity projects, it
 ## Workflows
 ### Python
 #### ci
-Using values default
+Using values default:
+
 ```yml
 name: ci
 
@@ -28,13 +29,15 @@ on:
 
 jobs:
     ci:
-      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python/ci.yml@main
+      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_ci.yml@main
 
 ```
-Using passing the arguments.
+Using passing the arguments:
 
-- list_os: List os to use in matrix. Default: "['ubuntu-latest']"
-- list_version: List versions to use in matrix. "['3.7', 3.11']"
+| Name                | Description                          | Default             | Required |
+|---------------------|--------------------------------------|---------------------|----------|
+ | list_os_name        | List os name to use in matrix        | "['ubuntu-latest']" | false    | 
+| list_python_version | List version python to use in matrix | "['3.7', 3.11']"    | false    |
 
 ```yml
 name: ci
@@ -45,10 +48,10 @@ on:
 
 jobs:
     ci:
-      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python/ci.yml@main
+      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_ci.yml@main
       with: 
-          list_os: "['ubuntu-latest', 'windows-latest']"
-          list_version: "['3.7', '3.10', 3.11']"
+          list_os_name: "['ubuntu-latest', 'windows-latest']"
+          list_python_version: "['3.7', '3.10', 3.11']"
 ```
 
 #### Linter
@@ -63,16 +66,19 @@ on:
 
 jobs:
     linter:
-      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python/linter.yml@main
+      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_linter.yml@main
 
 ```
 Using passing the arguments:
 
-- list_os: List os to use in matrix. Default: "['ubuntu-latest']"
-- list_version: List versions to use in matrix. Default: "['3.7']"
-- mypy: Execute mypy or no. Default: false
-- flake8: Execute flake8 or no. Default: true
-- folder: Folder to execute flake8 and mypy. Default: "botcity"
+| Name                | Description                          | Default             | Required |
+|---------------------|--------------------------------------|---------------------|----------|
+ | list_os_name        | List os name to use in matrix        | "['ubuntu-latest']" | false    | 
+| list_python_version | List version python to use in matrix | "['3.7']"           | false    |
+ | mypy                | Execute mypy or no                   | false               | false    |
+ | flake8              | Execute flake8 or no                 | true                | false    | 
+ | folder              | Folder to execute flake8 and mypy    | "botcity            | false    | 
+
 
 ```yml
 name: linter
@@ -83,37 +89,22 @@ on:
 
 jobs:
     linter:
-      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python/linter.yml@main
+      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_linter.yml@main
       with: 
-          list_os: "['ubuntu-latest', 'windows-latest']"
-          list_version: "['3.7', '3.11']"
+          list_os_name: "['ubuntu-latest', 'windows-latest']"
+          list_python_version: "['3.7', '3.11']"
           flake8: true 
           mypy: true
           folder: "botcity"
 ```
 
 #### Pypi upload
-Using values default:
-
-```yml
-name: Publish Python distributions to PyPI
-
-on:
-  release:
-    types: [published]
-
-jobs:
-    pypi_upload:
-      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python/pypi_upload.yml@main
-
-```
-Using passing the arguments:
-
-- list_version: List versions to use in matrix. Default:  "['3.7']"
 
 Using secrets required:
-- PYPI_API_TOKEN
 
+| Name                | Description          | Default | Required   |
+|---------------------|----------------------|---------|------------|
+ | PYPI_API_TOKEN      | Token to upload pipy |         | ** true ** | 
 
 ```yml
 name: Publish Python distributions to PyPI
@@ -124,7 +115,7 @@ on:
 
 jobs:
     pypi_upload:
-      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python/pypi_upload.yml@main
+      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_pypi_upload.yml@main
       with:
         list_version: "['3.7', '3.8']"
         secrets: inherit # Or ${{ secrets.PYPI_API_TOKEN }}
