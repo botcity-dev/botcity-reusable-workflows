@@ -1,0 +1,62 @@
+name: Tests
+
+on:
+  workflow_call:
+    secrets:
+      BOTCITY_SERVER:
+        required: true
+      BOTCITY_LOGIN:
+        required: true
+      BOTCITY_KEY:
+        required: true
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BOTCITY_SERVER: ${{ secrets.BOTCITY_SERVER }}
+  BOTCITY_LOGIN: ${{ secrets.BOTCITY_LOGIN }}
+  BOTCITY_KEY: ${{ secrets.BOTCITY_KEY }}
+
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    defaults:
+        run:
+          shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.7", "3.11"]
+    steps:
+      - uses: actions/checkout@v2
+        if: ${{ github.event_name == 'push' }}
+
+      - uses: actions/checkout@v2
+        if:  ${{ github.event_name == 'pull_request' }}
+        with:
+          ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Test Dependencies
+        run: |
+          pip install -r test-requirements.txt
+      - name: Install Package
+        run: |
+          pip install .
+
+      - name: Run Tests
+        env:
+          BOTCITY_SERVER: ${{ env.BOTCITY_SERVER }}
+          BOTCITY_LOGIN: ${{ env.BOTCITY_LOGIN }}
+          BOTCITY_KEY: ${{ env.BOTCITY_KEY }}
+        run: |
+          pytest -v -vrxs
