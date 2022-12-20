@@ -13,15 +13,38 @@ on:
         type: boolean
       os:
         required: false
-        default: [ubuntu-latest]
+        default: "[ubuntu-latest]"
       version:
+        type: string
         required: false
-        default: [3.7]
+        default: "[3.7]"
 
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      os: ${{ steps.setVariables.outputs.os }}
+      version: ${{ steps.setVariables.outputs.version }}
+    steps:
+      - id: Set variable os
+        run: |
+          echo "::set-output name=os::os"
+        env:
+          os: ${{ inputs.os }}
+      - id: Set variable version
+        run: |
+          echo "::set-output name=version::version"
+        env:
+          version: ${{ inputs.version }}
+
+
   build:
     runs-on: ${{ matrix.os }}
+
+    needs: setup
+    permissions:
+      security-events: write
 
     defaults:
         run:
@@ -29,8 +52,8 @@ jobs:
 
     strategy:
       matrix:
-        os: ${{ inputs.os }}
-        python-version: ${{ inputs.version }}
+        os:  ${{ fromJson(needs.setup.outputs.os) }}
+        python-version:  ${{ fromJson(needs.setup.outputs.version) }}
 
     steps:
       - uses: actions/checkout@v2
