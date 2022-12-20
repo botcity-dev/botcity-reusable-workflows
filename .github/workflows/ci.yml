@@ -2,6 +2,15 @@ name: Tests
 
 on:
   workflow_call:
+    inputs:
+      list_os:
+        type: string
+        required: false
+        default: "['ubuntu-latest']"
+      list_version:
+        type: string
+        required: false
+        default: "['3.7', '3.11']"
 
 
 concurrency:
@@ -17,8 +26,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.7", "3.11"]
+        os:  ${{fromJson(inputs.list_os)}}
+        python-version:  ${{fromJson(inputs.list_version)}}
     steps:
       - uses: actions/checkout@v2
         if: ${{ github.event_name == 'push' }}
