@@ -28,12 +28,12 @@ jobs:
       os: ${{ steps.setVariables.outputs.os }}
       version: ${{ steps.setVariables.outputs.version }}
     steps:
-      - id: Set variable os
+      - id: setVariableOs
         run: |
           echo "::set-output name=os::os"
         env:
           os: ${{ inputs.os }}
-      - id: Set variable version
+      - id: setVariableVersion
         run: |
           echo "::set-output name=version::version"
         env:
