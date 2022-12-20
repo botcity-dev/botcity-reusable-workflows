@@ -68,11 +68,11 @@ jobs:
 ```
 Using passing the arguments:
 
-- list_os: List os to use in matrix.
-- list_version: List versions to use in matrix.
-- mypy: Execute mypy or no.
-- flake8: Execute flake8 or no.
-- folder: Folder to execute flake8 and mypy.
+- list_os: List os to use in matrix. Default: "['ubuntu-latest']"
+- list_version: List versions to use in matrix. Default: "['3.7']"
+- mypy: Execute mypy or no. Default: false
+- flake8: Execute flake8 or no. Default: true
+- folder: Folder to execute flake8 and mypy. Default: "botcity"
 
 ```yml
 name: linter
