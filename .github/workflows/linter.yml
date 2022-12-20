@@ -3,10 +3,6 @@ name: Linter
 on:
   workflow_call:
     inputs:
-      version_python:
-        required: false
-        default: 3.7
-        type: string
       flake8:
         required: false
         default: true
@@ -32,8 +28,8 @@ jobs:
     strategy:
       matrix:
         fail-fast: false
-        os: [${{ inputs.os }}]
-        python-version: [${{ inputs.version_python }}]
+        os: [ubuntu-latest]
+        python-version: [3.7]
 
     steps:
       - uses: actions/checkout@v2
