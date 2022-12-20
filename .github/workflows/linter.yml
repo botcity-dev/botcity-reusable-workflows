@@ -31,6 +31,7 @@ jobs:
 
     strategy:
       matrix:
+        fail-fast: false
         os: [${{ inputs.os }}]
         python-version: [${{ inputs.version_python }}]
 
