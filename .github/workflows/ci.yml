@@ -2,24 +2,11 @@ name: Tests
 
 on:
   workflow_call:
-    secrets:
-      BOTCITY_SERVER:
-        required: true
-      BOTCITY_LOGIN:
-        required: true
-      BOTCITY_KEY:
-        required: true
 
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
-env:
-  BOTCITY_SERVER: ${{ secrets.BOTCITY_SERVER }}
-  BOTCITY_LOGIN: ${{ secrets.BOTCITY_LOGIN }}
-  BOTCITY_KEY: ${{ secrets.BOTCITY_KEY }}
-
 
 jobs:
   build:
@@ -54,9 +41,5 @@ jobs:
           pip install .
 
       - name: Run Tests
-        env:
-          BOTCITY_SERVER: ${{ env.BOTCITY_SERVER }}
-          BOTCITY_LOGIN: ${{ env.BOTCITY_LOGIN }}
-          BOTCITY_KEY: ${{ env.BOTCITY_KEY }}
         run: |
           pytest -v -vrxs
