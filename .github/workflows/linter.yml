@@ -12,6 +12,7 @@ on:
         default: false
         type: boolean
       os:
+        type: string
         required: false
         default: "[ubuntu-latest]"
       version:
