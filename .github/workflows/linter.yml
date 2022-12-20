@@ -13,8 +13,10 @@ on:
         type: boolean
       os:
         required: false
-        default: ubuntu-latest
-        type: string
+        default: [ubuntu-latest]
+      version:
+        required: false
+        default: [3.7]
 
 
 jobs:
@@ -27,8 +29,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        python-version: [3.7]
+        os: ${{ inputs.os }}
+        python-version: ${{ inputs.version }}
 
     steps:
       - uses: actions/checkout@v2
