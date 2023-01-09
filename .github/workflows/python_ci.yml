@@ -11,7 +11,11 @@ on:
         type: string
         required: false
         default: "['3.7', '3.11']"
-
+    secrets:
+      GOOGLE_CREDENTIALS:
+        required: false
+      GOOGLE_TOKEN:
+        required: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
