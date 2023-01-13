@@ -16,6 +16,12 @@ on:
         required: false
       GOOGLE_TOKEN:
         required: false
+      ANTICAPTCHA_KEY:
+        required: false
+      DBC_USERNAME:
+        required: false
+      DBC_PASSWORD:
+        required: false
 env:
   # Google Credentials
   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
