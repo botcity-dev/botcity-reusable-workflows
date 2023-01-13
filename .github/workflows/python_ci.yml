@@ -16,10 +16,23 @@ on:
         required: false
       GOOGLE_TOKEN:
         required: false
+      ANTICAPTCHA_KEY:
+        required: false
+      DBC_USERNAME:
+        required: false
+      DBC_PASSWORD:
+        required: false
 env:
   # Google Credentials
   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
   GOOGLE_TOKEN: ${{ secrets.GOOGLE_TOKEN }}
+
+  # AntiCaptcha Key
+  ANTICAPTCHA_KEY: ${{ secrets.ANTICAPTCHA_KEY }}
+
+  # Death By Captcha user data
+  DBC_USERNAME: ${{ secrets.DBC_USERNAME }}
+  DBC_PASSWORD: ${{ secrets.DBC_PASSWORD }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
