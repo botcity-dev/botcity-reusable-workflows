@@ -5,11 +5,11 @@
 To facilitate the implementation of workflows shared by all botcity projects, it is necessary to include it in this project, for example the ci, linter and publish in pypi workflows.
 ## Available workflows
 
-| Name            | Language | Arguments                                       | Secrets          | Description                         |
-|-----------------|----------|-------------------------------------------------|------------------|-------------------------------------|
-| **ci**          | python   | list_os_name, list_python_version               |                  | Run tests in pytest                 |
-| **linter**      | python   | flake8, mypy, list_os_name, list_python_version |                  | Run flake8 and mypy.                |
-| **pypi_upload** | python   |                                                 | PYPI_API_TOKEN   | Build package and publish in pypi   |
+| Name            | Language | Arguments                                                                         | Secrets          | Description                            |
+|-----------------|----------|-----------------------------------------------------------------------------------|------------------|----------------------------------------|
+| **ci**          | python   | list_os_name, list_python_version                                                 |                  | Run tests in pytest                    |
+| **linter**      | python   | flake8, mypy, list_os_name, list_python_version, docstring, docstring_convention  |                  | Run flake8, mypy and flake8-docstring. |
+| **pypi_upload** | python   |                                                                                   | PYPI_API_TOKEN   | Build package and publish in pypi      |
 
 
 
@@ -71,13 +71,16 @@ jobs:
 ```
 Using passing the arguments:
 
-| Name                | Description                          | Default             | Required |
-|---------------------|--------------------------------------|---------------------|----------|
- | list_os_name        | List os name to use in matrix        | "['ubuntu-latest']" | false    | 
-| list_python_version | List version python to use in matrix | "['3.7']"           | false    |
- | mypy                | Execute mypy or no                   | false               | false    |
- | flake8              | Execute flake8 or no                 | true                | false    | 
- | folder              | Folder to execute flake8 and mypy    | "botcity            | false    | 
+| Name                 | Description                          | Default             | Required |
+|----------------------|--------------------------------------|---------------------|----------|
+ | list_os_name         | List os name to use in matrix        | "['ubuntu-latest']" | false    | 
+| list_python_version  | List version python to use in matrix | "['3.7']"           | false    |
+ | mypy                 | Execute mypy or no                   | false               | false    |
+ | flake8               | Execute flake8 or no                 | true                | false    | 
+ | docstring            | Execute flake8-docstring or no.      | false               | false    |
+ | folder               | Folder to execute flake8 and mypy    | "botcity"           | false    |
+ | docstring_convention | Convention that will be used.        | "google"            | false    | 
+
 
 
 ```yml
@@ -96,6 +99,8 @@ jobs:
           flake8: true 
           mypy: true
           folder: "botcity"
+          docstring: true
+          docstring_convention: "google"
 ```
 
 #### Pypi upload

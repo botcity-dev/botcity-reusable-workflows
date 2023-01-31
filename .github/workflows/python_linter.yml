@@ -23,6 +23,14 @@ on:
         type: string
         required: false
         default: "['3.7']"
+      docstring:
+        required: false
+        default: false
+        type: boolean
+      docstring_convention:
+        required: false
+        default: "google"
+        type: string
 
 
 jobs:
@@ -59,3 +67,7 @@ jobs:
         if: ${{ inputs.mypy }}
         run: |
           mypy --namespace-packages -p ${{ inputs.folder }}
+
+      - name: Run docstring linter
+        if: ${{ inputs.docstring }}
+        run: flake8 --show-source ${{ inputs.folder }} --docstring-convention ${{ inputs.docstring_convention }}
