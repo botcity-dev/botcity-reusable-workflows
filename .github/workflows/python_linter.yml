@@ -70,4 +70,6 @@ jobs:
 
       - name: Run docstring linter
         if: ${{ inputs.docstring }}
-        run: flake8 --show-source ${{ inputs.folder }} --docstring-convention ${{ inputs.docstring_convention }}
+        run: |
+          pip install flake8-docstrings
+          flake8 --show-source ${{ inputs.folder }} --docstring-convention ${{ inputs.docstring_convention }}
