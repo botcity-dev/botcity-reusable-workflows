@@ -28,7 +28,7 @@ env:
   # Google Credentials
   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
   GOOGLE_TOKEN: ${{ secrets.GOOGLE_TOKEN }}
-  GOOGLE_GMAIL: ${{ secrets.GOOGLE_CREDENTIALS }}
+  GOOGLE_GMAIL: ${{ secrets.GOOGLE_GMAIL }}
 
   # AntiCaptcha Key
   ANTICAPTCHA_KEY: ${{ secrets.ANTICAPTCHA_KEY }}
