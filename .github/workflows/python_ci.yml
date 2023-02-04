@@ -24,6 +24,11 @@ on:
         required: false
       DBC_PASSWORD:
         required: false
+      SLACK_TOKEN:
+        required: false
+      SLACK_CHANNEL:
+        required: false
+
 env:
   # Google Credentials
   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
@@ -36,6 +41,10 @@ env:
   # Death By Captcha user data
   DBC_USERNAME: ${{ secrets.DBC_USERNAME }}
   DBC_PASSWORD: ${{ secrets.DBC_PASSWORD }}
+  
+  # Slack Credentials
+  SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+  SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
