@@ -29,7 +29,7 @@ on:
 
 jobs:
     ci:
-      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_ci.yml@main
+      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_ci.yml@latest
 
 ```
 Using passing the arguments:
@@ -48,10 +48,10 @@ on:
 
 jobs:
     ci:
-      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_ci.yml@main
+      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_ci.yml@latest
       with: 
           list_os_name: "['ubuntu-latest', 'windows-latest']"
-          list_python_version: "['3.7', '3.10', 3.11']"
+          list_python_version: "['3.7', '3.10', '3.11']"
 ```
 
 #### Linter
@@ -66,7 +66,7 @@ on:
 
 jobs:
     linter:
-      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_linter.yml@main
+      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_linter.yml@latest
 
 ```
 Using passing the arguments:
@@ -92,7 +92,7 @@ on:
 
 jobs:
     linter:
-      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_linter.yml@main
+      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_linter.yml@latest
       with: 
           list_os_name: "['ubuntu-latest', 'windows-latest']"
           list_python_version: "['3.7', '3.11']"
@@ -120,7 +120,7 @@ on:
 
 jobs:
     pypi_upload:
-      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_pypi_upload.yml@main
+      uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_pypi_upload.yml@latest
       with:
         list_version: "['3.7', '3.8']"
         secrets: inherit # Or ${{ secrets.PYPI_API_TOKEN }}
