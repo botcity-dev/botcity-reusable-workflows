@@ -28,6 +28,8 @@ on:
         required: false
       SLACK_CHANNEL:
         required: false
+      DISCORD_URL:
+        required: false
 
 env:
   # Google Credentials
@@ -45,6 +47,9 @@ env:
   # Slack Credentials
   SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
   SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+
+  # Discord Credentials
+  DISCORD_URL: ${{ secrets.DISCORD_URL }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
