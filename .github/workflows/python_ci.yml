@@ -30,6 +30,12 @@ on:
         required: false
       DISCORD_URL:
         required: false
+      MS365_TOKEN:
+        required: false
+      MS365_CLIENT_ID:
+        required: false
+      MS365_CLIENT_SECRET:
+        required: false
 
 env:
   # Google Credentials
@@ -50,6 +56,11 @@ env:
 
   # Discord Credentials
   DISCORD_URL: ${{ secrets.DISCORD_URL }}
+
+  # MS365 Credentials
+  MS365_TOKEN: ${{ secrets.MS365_TOKEN }}
+  MS365_CLIENT_ID: ${{ secrets.MS365_CLIENT_ID }}
+  MS365_CLIENT_SECRET: ${{ secrets.MS365_CLIENT_SECRET }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
