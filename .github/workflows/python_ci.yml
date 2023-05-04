@@ -36,6 +36,8 @@ on:
         required: false
       MS365_CLIENT_SECRET:
         required: false
+      MS365_OUTLOOK_EMAIL:
+        required: false
 
 env:
   # Google Credentials
@@ -61,6 +63,7 @@ env:
   MS365_TOKEN: ${{ secrets.MS365_TOKEN }}
   MS365_CLIENT_ID: ${{ secrets.MS365_CLIENT_ID }}
   MS365_CLIENT_SECRET: ${{ secrets.MS365_CLIENT_SECRET }}
+  MS365_OUTLOOK_EMAIL: ${{ secrets.MS365_OUTLOOK_EMAIL }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
