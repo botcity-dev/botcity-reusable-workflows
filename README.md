@@ -37,7 +37,7 @@ Using passing the arguments:
 | Name                | Description                          | Default             | Required |
 |---------------------|--------------------------------------|---------------------|----------|
  | list_os_name        | List os name to use in matrix        | "['ubuntu-latest']" | false    | 
-| list_python_version | List version python to use in matrix | "['3.7', 3.11']"    | false    |
+| list_python_version | List version python to use in matrix | "['3.9', 3.12']"    | false    |
 
 ```yml
 name: ci
@@ -51,7 +51,7 @@ jobs:
       uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_ci.yml@latest
       with: 
           list_os_name: "['ubuntu-latest', 'windows-latest']"
-          list_python_version: "['3.7', '3.10', '3.11']"
+          list_python_version: "['3.9', '3.10', '3.12']"
 ```
 
 #### Linter
@@ -74,7 +74,7 @@ Using passing the arguments:
 | Name                 | Description                          | Default             | Required |
 |----------------------|--------------------------------------|---------------------|----------|
  | list_os_name         | List os name to use in matrix        | "['ubuntu-latest']" | false    | 
-| list_python_version  | List version python to use in matrix | "['3.7']"           | false    |
+| list_python_version  | List version python to use in matrix | "['3.9']"           | false    |
  | mypy                 | Execute mypy or no                   | false               | false    |
  | flake8               | Execute flake8 or no                 | true                | false    | 
  | docstring            | Execute flake8-docstring or no.      | false               | false    |
@@ -95,7 +95,7 @@ jobs:
       uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_linter.yml@latest
       with: 
           list_os_name: "['ubuntu-latest', 'windows-latest']"
-          list_python_version: "['3.7', '3.11']"
+          list_python_version: "['3.9', '3.12']"
           flake8: true 
           mypy: true
           folder: "botcity"
@@ -122,6 +122,6 @@ jobs:
     pypi_upload:
       uses: botcity-dev/botcity-reusable-workflows/.github/workflows/python_pypi_upload.yml@latest
       with:
-        list_version: "['3.7', '3.8']"
+        list_version: "['3.9', '3.8']"
         secrets: inherit # Or ${{ secrets.PYPI_API_TOKEN }}
 ```
