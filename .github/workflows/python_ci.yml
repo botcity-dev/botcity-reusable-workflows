@@ -51,7 +51,7 @@ env:
   # Death By Captcha user data
   DBC_USERNAME: ${{ secrets.DBC_USERNAME }}
   DBC_PASSWORD: ${{ secrets.DBC_PASSWORD }}
-  
+
   # Slack Credentials
   SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
   SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
@@ -81,10 +81,10 @@ jobs:
         os:  ${{fromJson(inputs.list_os_name)}}
         python-version:  ${{fromJson(inputs.list_python_version)}}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
