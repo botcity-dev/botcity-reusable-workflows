@@ -1,0 +1,87 @@
+name: Docker Vulnerability Scan Reusable
+
+on:
+  workflow_call:
+    inputs:
+      docker-image:
+        required: true
+        type: string
+      build-command:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  vulnerability-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: ${{ inputs.build-command }}
+
+      - name: Scan Docker image with Anchore (Grype)
+        uses: anchore/scan-action@v6
+        with:
+          cache-db: true
+          image: ${{ inputs.docker-image }}
+          fail-build: false
+          output-format: table
+          output-file: grype-output.txt
+
+      - name: Capture scan output to use in issues/comments
+        id: capture
+        run: |
+          echo 'RESULT<<EOF' >> $GITHUB_OUTPUT
+          cat grype-output.txt >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Count number of vulnerabilities
+        id: vuln_check
+        run: |
+          VULN_COUNT=$(tail -n +2 grype-output.txt | grep -vE '^\s*$' | wc -l)
+          echo "count=$VULN_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Authenticate GH CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Check if issue exists and create or update it
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          ISSUE_TITLE: "Docker Vulnerability Scan Report"
+          ISSUE_BODY: |
+            ## 🛡️ Docker Image Vulnerability Scan
+            Trigger: `${{ github.event_name }}`
+            ```
+            ${{ steps.capture.outputs.RESULT }}
+            ```
+        run: |
+          ISSUE_NUMBER=$(gh issue list --state open --search "$ISSUE_TITLE in:title" --json number,title -q '.[] | select(.title=="'"$ISSUE_TITLE"'") | .number')
+
+          if [ -z "$ISSUE_NUMBER" ]; then
+            gh issue create --title "$ISSUE_TITLE" --body "$ISSUE_BODY" --label security
+          else
+            gh issue edit "$ISSUE_NUMBER" --body "$ISSUE_BODY"
+          fi
+
+      - name: Comment on PR with scan results
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ## 🛡️ Docker Image Vulnerability Scan
+            ```
+            ${{ steps.capture.outputs.RESULT }}
+            ```
+
+      - name: Fail workflow if vulnerabilities found (on PR)
+        if: github.event_name == 'pull_request' && steps.vuln_check.outputs.count != '0'
+        run: |
+          echo "Vulnerabilities found in PR — failing the workflow."
+          exit 1
