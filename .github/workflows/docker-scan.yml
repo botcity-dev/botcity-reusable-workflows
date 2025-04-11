@@ -9,6 +9,18 @@ on:
       build-command:
         required: true
         type: string
+      with-maven:
+        required: false
+        type: boolean
+        default: false
+      java-version:
+        required: false
+        type: string
+        default: '21'
+      java-distribution:
+        required: false
+        type: string
+        default: 'temurin'
 
 permissions:
   contents: write
@@ -21,6 +33,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up JDK 11
+        if: ${{ inputs.with-maven }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ inputs.java-version }}
+          distribution: ${{ inputs.java-distribution }}
+          cache: maven
 
       - name: Build Docker image
         run: ${{ inputs.build-command }}
