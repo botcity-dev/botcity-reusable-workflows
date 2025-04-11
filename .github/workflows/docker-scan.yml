@@ -3,6 +3,10 @@ name: Docker Vulnerability Scan Reusable
 on:
   workflow_call:
     inputs:
+      docker-file:
+        required: false
+        type: string
+        default: 'Dockerfile'
       docker-image:
         required: true
         type: string
@@ -72,9 +76,9 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       - name: Check if issue exists and create or update it
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.vuln_check.outputs.count != '0'
         env:
-          ISSUE_TITLE: "Docker Vulnerability Scan Report"
+          ISSUE_TITLE: "Docker Vulnerability Scan Report - ${{ inputs.docker-file }}"
           ISSUE_BODY: |
             ## 🛡️ Docker Image Vulnerability Scan
             Trigger: `${{ github.event_name }}`
@@ -96,7 +100,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            ## 🛡️ Docker Image Vulnerability Scan
+            ## 🛡️ Docker Image Vulnerability Scan - ${{ inputs.docker-file }}
             ```
             ${{ steps.capture.outputs.RESULT }}
             ```
