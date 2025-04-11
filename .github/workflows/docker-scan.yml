@@ -34,7 +34,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 11
+      - name: Set up JDK ${{ inputs.java-version }}
         if: ${{ inputs.with-maven }}
         uses: actions/setup-java@v4
         with:
@@ -64,7 +64,8 @@ jobs:
       - name: Count number of vulnerabilities
         id: vuln_check
         run: |
-          VULN_COUNT=$(tail -n +2 grype-output.txt | grep -vE '^\s*$' | wc -l)
+          # Skip header, exclude empty lines, and count only rows where last column is High or Critical
+          VULN_COUNT=$(tail -n +2 grype-output.txt | awk '{ if ($NF == "High" || $NF == "Critical") print }' | wc -l)
           echo "count=$VULN_COUNT" >> $GITHUB_OUTPUT
 
       - name: Authenticate GH CLI
