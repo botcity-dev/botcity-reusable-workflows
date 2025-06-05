@@ -17,6 +17,8 @@ on:
         required: true
       EC2_INSTANCE_ID:
         required: true
+      ENV_VARS:
+        required: true
 
 jobs:
   deploy:
@@ -32,6 +34,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ inputs.aws-region }}
+
+      - name: Set environment variables from .env
+        run: |
+          echo "${{ secrets.ENV_VARS }}" > .env
+          set -a
+          source .env
+          set +a
 
       - name: Create script with injected commands
         run: |
