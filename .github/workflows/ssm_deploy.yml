@@ -44,9 +44,12 @@ jobs:
           echo '${{ inputs.commands }}' > ./deploy-ssm.sh
           chmod +x ./deploy-ssm.sh
 
+      - name: Clone repositório com script
+        run: git clone --depth=1 https://github.com/botcity-dev/botcity-reusable-workflows.git reusable
+
       - name: Execute script via SSM
         run: |
-          .github/scripts/run-ssm-command.sh \
+          ./reusable/.github/scripts/run-ssm-command.sh \
             --instance-id ${{ secrets.EC2_INSTANCE_ID }} \
             --region ${{ inputs.aws-region }} \
             --script-path ./deploy-ssm.sh
