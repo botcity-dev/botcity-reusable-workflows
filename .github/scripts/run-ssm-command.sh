@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+set -a
+source .env
+set +a
+
 while [[ "$#" -gt 0 ]]; do
   case $1 in
     --instance-id) INSTANCE_ID="$2"; shift ;;
