@@ -50,6 +50,6 @@ jobs:
       - name: Execute script via SSM
         run: |
           .github/scripts/run-ssm-command.sh \
-            --instance-id ${{ inputs.ec2-instance-id }} \
-            --region ${{ secrets.EC2_INSTANCE_ID }} \
+            --instance-id ${{ secrets.EC2_INSTANCE_ID }} \
+            --region ${{ inputs.aws-region }} \
             --script-path ./deploy-ssm.sh
