@@ -44,8 +44,11 @@ jobs:
           echo '${{ inputs.commands }}' > ./deploy-ssm.sh
           chmod +x ./deploy-ssm.sh
 
-      - name: Clone repositório com script
+      - name: Clone repository with script
         run: git clone --depth=1 --branch ENH/workflow-ssm https://github.com/botcity-dev/botcity-reusable-workflows.git reusable
+
+      - name: Grant execution permission to the script
+        run: chmod +x ./reusable/.github/scripts/run-ssm-command.sh
 
       - name: Execute script via SSM
         run: |
