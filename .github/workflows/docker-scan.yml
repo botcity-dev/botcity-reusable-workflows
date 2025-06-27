@@ -69,7 +69,7 @@ jobs:
         id: vuln_check
         run: |
           # Skip header, exclude empty lines, and count only rows where last column is High or Critical
-          VULN_COUNT=$(tail -n +2 grype-output.txt | awk '{ if ($NF == "High" || $NF == "Critical") print }' | wc -l)
+          VULN_COUNT=$(tail -n +2 grype-output.txt | awk '$0 ~ /[[:space:]](High|Critical)[[:space:]]/' | wc -l)
           echo "count=$VULN_COUNT" >> $GITHUB_OUTPUT
 
       - name: Authenticate GH CLI
