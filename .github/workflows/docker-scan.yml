@@ -52,7 +52,7 @@ jobs:
       - name: Scan Docker image with Anchore (Grype)
         uses: anchore/scan-action@v6
         with:
-          cache-db: true
+          cache-db: false
           image: ${{ inputs.docker-image }}
           fail-build: false
           output-format: table
