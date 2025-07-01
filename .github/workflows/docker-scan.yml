@@ -25,6 +25,18 @@ on:
         required: false
         type: string
         default: 'temurin'
+      with-aws-login:
+        required: false
+        type: boolean
+        default: false
+      aws-region:
+        required: false
+        type: string
+        default: 'us-east-1'
+      aws-ecr-registry:
+        required: false
+        type: string
+        default: 'NOT SET'
 
 permissions:
   contents: write
@@ -45,6 +57,19 @@ jobs:
           java-version: ${{ inputs.java-version }}
           distribution: ${{ inputs.java-distribution }}
           cache: maven
+
+      - name: Configure AWS credentials
+        if: ${{ inputs.with-aws-login }}
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.aws-region }}
+
+      - name: Login AWS ECR
+        if: ${{ inputs.with-aws-login }}
+        run: |
+          aws ecr get-login-password --region ${{ inputs.aws-region }} | docker login --username AWS --password-stdin ${{ inputs.aws-ecr-registry }}
 
       - name: Build Docker image
         run: ${{ inputs.build-command }}
