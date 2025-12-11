@@ -75,7 +75,7 @@ jobs:
         run: ${{ inputs.build-command }}
 
       - name: Scan Docker image with Anchore (Grype)
-        uses: anchore/scan-action@v6
+        uses: anchore/scan-action@v7
         with:
           cache-db: false
           image: ${{ inputs.docker-image }}
