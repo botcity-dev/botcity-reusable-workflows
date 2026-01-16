@@ -74,6 +74,13 @@ jobs:
       - name: Build Docker image
         run: ${{ inputs.build-command }}
 
+      - name: Create Grype config file to ignore some vulnerabilities (e.g. CVE-2026-22184) which was misclassified
+        run: |
+          cat <<EOF > .grype.yaml
+          ignore:
+            - vulnerability: CVE-2026-22184
+          EOF
+
       - name: Scan Docker image with Anchore (Grype)
         uses: anchore/scan-action@v7
         with:
