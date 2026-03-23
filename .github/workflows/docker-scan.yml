@@ -89,6 +89,7 @@ jobs:
           fail-build: false
           output-format: table
           output-file: grype-output.txt
+          only-fixed: true
 
       - name: Capture scan output to use in issues/comments
         id: capture
