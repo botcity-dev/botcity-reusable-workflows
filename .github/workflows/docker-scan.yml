@@ -38,6 +38,12 @@ on:
         type: string
         default: 'NOT SET'
 
+    secrets:
+      NEXUS_USERNAME:
+        required: false
+      NEXUS_PASSWORD:
+        required: false
+
 permissions:
   contents: write
   issues: write
@@ -73,6 +79,9 @@ jobs:
 
       - name: Build Docker image
         run: ${{ inputs.build-command }}
+        env:
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
 
       - name: Create Grype config file to ignore some vulnerabilities (e.g. CVE-2026-22184) which was misclassified
         run: |
