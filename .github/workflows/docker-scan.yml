@@ -37,6 +37,11 @@ on:
         required: false
         type: string
         default: 'NOT SET'
+      ignore-vulnerabilities:
+        required: false
+        type: string
+        default: ''
+        description: 'Comma-separated list of additional CVE IDs to ignore in Grype scan (e.g. CVE-2023-1234,CVE-2024-5678)'
 
     secrets:
       NEXUS_USERNAME:
@@ -83,12 +88,19 @@ jobs:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
 
-      - name: Create Grype config file to ignore some vulnerabilities (e.g. CVE-2026-22184) which was misclassified
+      - name: Create Grype config file to ignore vulnerabilities
         run: |
           cat <<EOF > .grype.yaml
           ignore:
             - vulnerability: CVE-2026-22184
           EOF
+          if [ -n "${{ inputs.ignore-vulnerabilities }}" ]; then
+            IFS=',' read -ra CVES <<< "${{ inputs.ignore-vulnerabilities }}"
+            for cve in "${CVES[@]}"; do
+              cve=$(echo "$cve" | xargs)
+              echo "  - vulnerability: $cve" >> .grype.yaml
+            done
+          fi
 
       - name: Scan Docker image with Anchore (Grype)
         uses: anchore/scan-action@v7
