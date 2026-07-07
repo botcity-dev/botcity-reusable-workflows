@@ -118,8 +118,8 @@ jobs:
       - name: Authenticate GH CLI
         run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
-      - name: Check if issue exists and create or update it
-        if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.vuln_check.outputs.count != '0'
+      - name: Sync vulnerability issue state
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
         env:
           ISSUE_TITLE: "Docker Vulnerability Scan Report - ${{ inputs.docker-file }}"
           ISSUE_BODY: |
@@ -128,13 +128,19 @@ jobs:
             ```
             ${{ steps.capture.outputs.RESULT }}
             ```
+          VULN_COUNT: ${{ steps.vuln_check.outputs.count }}
         run: |
           ISSUE_NUMBER=$(gh issue list --state open --search "$ISSUE_TITLE in:title" --json number,title -q '.[] | select(.title=="'"$ISSUE_TITLE"'") | .number')
 
-          if [ -z "$ISSUE_NUMBER" ]; then
-            gh issue create --title "$ISSUE_TITLE" --body "$ISSUE_BODY" --label security
-          else
-            gh issue edit "$ISSUE_NUMBER" --body "$ISSUE_BODY"
+          if [ "$VULN_COUNT" != "0" ]; then
+            if [ -z "$ISSUE_NUMBER" ]; then
+              gh issue create --title "$ISSUE_TITLE" --body "$ISSUE_BODY" --label security
+            else
+              gh issue edit "$ISSUE_NUMBER" --body "$ISSUE_BODY"
+            fi
+          elif [ -n "$ISSUE_NUMBER" ]; then
+            gh issue comment "$ISSUE_NUMBER" --body "✅ No more High/Critical vulnerabilities detected as of \`${{ github.sha }}\` on \`${{ github.ref_name }}\` (trigger: \`${{ github.event_name }}\`)."
+            gh issue close "$ISSUE_NUMBER" --reason completed
           fi
 
       - name: Comment on PR with scan results
