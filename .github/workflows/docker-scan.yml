@@ -87,8 +87,16 @@ jobs:
         run: |
           cat <<EOF > .grype.yaml
           ignore:
+            # OOB write in zlib's untgz demo utility (contrib/untgz/untgz.c), not the core zlib library — demo binary not shipped in our images, so not exploitable. Disputed; EPSS ~0.
             - vulnerability: CVE-2026-22184
-            - vulnerability: CVE-2026-7210
+            # Python imaplib not used anywhere in this service; upstream won't-fix on 3.14
+            - vulnerability: CVE-2025-15366
+            # Python poplib not used anywhere; upstream won't-fix on 3.14
+            - vulnerability: CVE-2025-15367
+            # Only affects in-tree dev builds of CPython; our image is an installed interpreter
+            - vulnerability: CVE-2026-12003
+            # Time-boxed: fixed on 3.14 branch, ships in 3.14.7;
+            - vulnerability: CVE-2026-15308
           EOF
 
       - name: Scan Docker image with Anchore (Grype)
