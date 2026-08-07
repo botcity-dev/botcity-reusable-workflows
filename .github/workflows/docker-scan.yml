@@ -95,8 +95,14 @@ jobs:
             - vulnerability: CVE-2025-15367
             # Only affects in-tree dev builds of CPython; our image is an installed interpreter
             - vulnerability: CVE-2026-12003
-            # Time-boxed: fixed on 3.14 branch, ships in 3.14.7;
+            # FP (feed lag): fixed in CPython 3.14.7 / gh-153030; Grype feed lists fixed-in 3.15.0b4 only. Remove once NVD/GHSA publish 3.14.x range.
             - vulnerability: CVE-2026-15308
+            # FP (feed lag): tarfile data/tar filter symlink escape, fixed in CPython 3.14.7 / gh-151558; Grype feed lists fixed-in 3.15.0b4 only. Remove once NVD/GHSA publish 3.14.x range.
+            - vulnerability: CVE-2026-11940
+            # FP (feed lag): tarfile streaming-mode EOF infinite loop, fixed in CPython 3.14.7 / gh-151981; Grype feed lists fixed-in 3.15.0b4 only. Remove once NVD/GHSA publish 3.14.x range.
+            - vulnerability: CVE-2026-11972
+            # FP (feed lag): configparser write() newline injection, fixed in CPython 3.14.7 / gh-143927; Grype feed lists fixed-in 3.15.0b4 only. Remove once NVD/GHSA publish 3.14.x range.
+            - vulnerability: CVE-2026-0864
           EOF
 
       - name: Scan Docker image with Anchore (Grype)
